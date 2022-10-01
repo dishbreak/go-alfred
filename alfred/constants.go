@@ -2,7 +2,6 @@ package alfred
 
 const (
 	SettingsFilename string = "settings.json"
-	CacheDir         string = "cache"
 	ExecStatus       string = "status"
 	StatusFailed     string = "failed"
 	StatusOk         string = "ok"
