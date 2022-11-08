@@ -1,6 +1,7 @@
 package alfred
 
 const (
+	SettingsDir      string = ".alfred_settings"
 	SettingsFilename string = "settings.json"
 	ExecStatus       string = "status"
 	StatusFailed     string = "failed"
