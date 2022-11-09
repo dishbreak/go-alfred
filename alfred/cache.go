@@ -44,6 +44,10 @@ func (c *ItemCache) Get() ([]ListItem, error) {
 	return c.Items, nil
 }
 
+func (c *ItemCache) Flush() error {
+	return c.refresh(true)
+}
+
 func (c *ItemCache) save() error {
 	c.ExpiryTime = (int64(c.timeout)) + time.Now().Unix()
 	err := os.MkdirAll(path.Dir(c.filePath), 0700)
@@ -66,14 +70,6 @@ func (c *ItemCache) expired() bool {
 }
 
 func (c *ItemCache) refresh(force bool) error {
-	if fp, err := os.Open(c.filePath); err == nil {
-		decoder := json.NewDecoder(fp)
-		err := decoder.Decode(c)
-		fp.Close()
-		if err != nil {
-			return err
-		}
-	}
 	if force || c.expired() {
 		items, err := c.refreshCallback()
 		if err != nil {
@@ -83,5 +79,13 @@ func (c *ItemCache) refresh(force bool) error {
 		return c.save()
 	}
 
-	return nil
+	fp, err := os.Open(c.filePath)
+	if err != nil {
+		return err
+	}
+	decoder := json.NewDecoder(fp)
+	err = decoder.Decode(c)
+	fp.Close()
+
+	return err
 }
