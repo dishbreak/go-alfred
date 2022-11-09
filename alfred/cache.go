@@ -66,7 +66,7 @@ func (c *ItemCache) save() error {
 }
 
 func (c *ItemCache) expired() bool {
-	return c.timeout != 0 && c.ExpiryTime < time.Now().Unix()
+	return c.timeout == 0 && c.ExpiryTime < time.Now().Unix()
 }
 
 func (c *ItemCache) refresh(force bool) error {
