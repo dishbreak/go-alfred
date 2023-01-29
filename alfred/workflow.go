@@ -1,10 +1,15 @@
 package alfred
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/zalando/go-keyring"
+)
 
 type Workflow struct {
 	applicationName string
 	settingsClient  *Settings
+	keyringName     string
 	config          map[string]interface{}
 }
 
@@ -28,6 +33,8 @@ func NewWorkflow(name string) (*Workflow, error) {
 		panic(errors.New("unexpected type assertion failure"))
 	}
 	w.config = cfg
+
+	w.keyringName = "go-alfred." + w.applicationName
 
 	return w, nil
 }
@@ -53,6 +60,18 @@ func (w *Workflow) GetConfigInt(key string, defaultVal int) int {
 func (w *Workflow) SetConfig(key string, value interface{}) error {
 	w.config[key] = value
 	return w.settingsClient.Save(w.config)
+}
+
+func (w *Workflow) GetSecret(key string) (string, error) {
+	return keyring.Get(w.keyringName, key)
+}
+
+func (w *Workflow) SaveSecret(key, value string) error {
+	return keyring.Set(w.keyringName, key, value)
+}
+
+func (w *Workflow) DeleteSecret(key string) error {
+	return keyring.Delete(w.keyringName, key)
 }
 
 func RunScriptAction(action func(*ScriptActionResponse) error, opts ...ScriptActionResponseOption) {
