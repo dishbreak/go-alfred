@@ -2,6 +2,8 @@ package alfred
 
 import (
 	"encoding/json"
+	"errors"
+	"io/fs"
 	"os"
 	"os/user"
 	"path"
@@ -10,6 +12,11 @@ import (
 type Settings struct {
 	payload  interface{}
 	filePath string
+}
+
+func NewKvSettings(name string) (*Settings, error) {
+	p := make(map[string]interface{})
+	return NewSettings(name, p)
 }
 
 func NewSettings(name string, payload interface{}) (*Settings, error) {
@@ -27,10 +34,15 @@ func NewSettings(name string, payload interface{}) (*Settings, error) {
 }
 
 func (s *Settings) Load() (interface{}, error) {
+
 	fp, err := os.Open(s.filePath)
-	if err != nil {
+	if errors.Is(err, fs.ErrNotExist) {
+		err := s.Save(s.payload)
+		return s.payload, err
+	} else if err != nil {
 		return nil, err
 	}
+
 	defer fp.Close()
 
 	decoder := json.NewDecoder(fp)
