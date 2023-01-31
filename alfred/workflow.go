@@ -26,13 +26,13 @@ func NewWorkflow(name string) (*Workflow, error) {
 
 	data, err := w.settingsClient.Load()
 	if err != nil {
-		panic(err)
+		return w, err
 	}
-	cfg, ok := data.(map[string]interface{})
+	cfg, ok := data.(*map[string]interface{})
 	if !ok {
-		panic(errors.New("unexpected type assertion failure"))
+		return w, errors.New("unexpected type assertion failure")
 	}
-	w.config = cfg
+	w.config = *cfg
 
 	w.keyringName = "go-alfred." + w.applicationName
 
