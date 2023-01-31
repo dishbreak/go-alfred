@@ -16,7 +16,7 @@ type Settings struct {
 
 func NewKvSettings(name string) (*Settings, error) {
 	p := make(map[string]interface{})
-	return NewSettings(name, p)
+	return NewSettings(name, &p)
 }
 
 func NewSettings(name string, payload interface{}) (*Settings, error) {
