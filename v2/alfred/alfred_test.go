@@ -2,7 +2,6 @@ package alfred
 
 import (
 	"bytes"
-	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
