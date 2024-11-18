@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/dishbreak/go-alfred/compare/v2.0.0...v2.0.1) (2024-11-15)
+
+
+### Bug Fixes
+
+* clean up test imports ([95c6dd7](https://github.com/dishbreak/go-alfred/commit/95c6dd73b4d4ef3fe5d6baa4503ff3315d07b385))
+
 ## [2.0.0](https://github.com/dishbreak/go-alfred/compare/v1.0.0...v2.0.0) (2024-11-15)
 
 
